@@ -1,0 +1,26 @@
+version: '3.2'
+services:
+    dashboard:
+        build: ./dashboard/
+        image: front-dashboard
+#        depends_on:
+#            - backend
+        ports:
+            - ${DASHBOARD_PORT_HTTP:-8080}:8080
+    api:
+        build: ./api
+        image: backend-api
+        depends_on:
+            - db
+        ports:
+            - ${API_PORT:-9090}:9090
+        environment:
+            - PORT=9090
+    db:
+        image: mongo:latest
+        volumes:
+            - type: 'volume'
+              source: 'mongodb_data'
+              target: '/data/db'
+volumes:
+    mongodb_data: {}
